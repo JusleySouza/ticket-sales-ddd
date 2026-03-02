@@ -1,18 +1,17 @@
 package br.com.ticket.sale.core.events.domain.entities;
 
 import br.com.ticket.sale.core.common.domain.AggregateRoot;
-import lombok.Getter;
-import lombok.Setter;
+import br.com.ticket.sale.core.common.domain.value_objects.Cpf;
+import br.com.ticket.sale.core.common.domain.value_objects.Name;
+
 import java.util.Map;
 import java.util.UUID;
 
-@Getter
-@Setter
 public class Customer extends AggregateRoot {
 
     private String id;
-    private String cpf;
-    private String name;
+    private Cpf cpf;
+    private Name name;
 
     public Customer(CustomerConstructorProps props) {
         super();
@@ -39,6 +38,18 @@ public class Customer extends AggregateRoot {
                 "cpf", this.cpf,
                 "name", this.name
         );
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Cpf getCpf() {
+        return cpf;
+    }
+
+    public Name getName() {
+        return name;
     }
 
 }
