@@ -5,17 +5,14 @@ import br.com.ticket.sale.core.common.domain.value_objects.Cpf;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
 
 import java.util.Map;
-import java.util.UUID;
 
-public class Customer extends AggregateRoot {
+public class Customer extends AggregateRoot<CustomerId> {
 
-    private String id;
-    private Cpf cpf;
-    private Name name;
+    private final Cpf cpf;
+    private final Name name;
 
     public Customer(CustomerConstructorProps props) {
-        super();
-        this.id = props.id() != null ? props.id() : UUID.randomUUID().toString();
+        this.id = props.id() == null ? new CustomerId() : props.id();
         this.cpf = props.cpf();
         this.name = props.name();
     }
@@ -24,7 +21,7 @@ public class Customer extends AggregateRoot {
     public static Customer create(CreateCustomerCommand command) {
         return new Customer(
                 new CustomerConstructorProps(
-                        null,
+                        new CustomerId(),
                         command.cpf(),
                         command.name()
                 )
@@ -34,14 +31,10 @@ public class Customer extends AggregateRoot {
     @Override
     public Map<String, Object> toJSON() {
         return Map.of(
-                "id", this.id,
-                "cpf", this.cpf,
-                "name", this.name
+                "id", id.getValue(),
+                "cpf", cpf.getValue(),
+                "name", name.getValue()
         );
-    }
-
-    public String getId() {
-        return id;
     }
 
     public Cpf getCpf() {
