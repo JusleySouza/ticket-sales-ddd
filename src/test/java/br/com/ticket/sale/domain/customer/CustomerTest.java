@@ -5,6 +5,9 @@ import br.com.ticket.sale.core.common.domain.value_objects.Name;
 import br.com.ticket.sale.core.events.domain.entities.CreateCustomerCommand;
 import br.com.ticket.sale.core.events.domain.entities.Customer;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import br.com.ticket.sale.core.events.domain.entities.CustomerConstructorProps;
+import br.com.ticket.sale.core.events.domain.entities.CustomerId;
 import org.junit.jupiter.api.Test;
 
 public class CustomerTest {
@@ -19,9 +22,23 @@ public class CustomerTest {
 
         Customer customer = Customer.create(command);
 
-        assertThat(customer).isNotNull();
+        System.out.println(customer.getId());
+
+        assertThat(customer).isInstanceOf(Customer.class);
+        assertThat(customer.getId()).isNotNull();
+        assertThat(customer.getId()).isInstanceOf(CustomerId.class);
         assertThat(customer.getName().getValue()).isEqualTo("João");
         assertThat(customer.getCpf().getValue()).isEqualTo("99346413050");
+
+        Customer customer2 = new Customer(
+                new CustomerConstructorProps(
+                        new CustomerId(customer.getId().getValue()),
+                        new Cpf("703.758.870-91"),
+                        new Name("João Pedro")
+                )
+        );
+
+        assertThat(customer.equals(customer2)).isTrue();
     }
 
 }
