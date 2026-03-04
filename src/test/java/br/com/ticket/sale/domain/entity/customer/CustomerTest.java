@@ -1,4 +1,4 @@
-package br.com.ticket.sale.domain.customer;
+package br.com.ticket.sale.domain.entity.customer;
 
 import br.com.ticket.sale.core.common.domain.value_objects.Cpf;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
@@ -22,7 +22,7 @@ public class CustomerTest {
 
         Customer customer = Customer.create(command);
 
-        System.out.println(customer.getId());
+        System.out.println(customer.toJSON());
 
         assertThat(customer).isInstanceOf(Customer.class);
         assertThat(customer.getId()).isNotNull();
