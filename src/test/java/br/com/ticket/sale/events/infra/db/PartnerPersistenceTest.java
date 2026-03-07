@@ -4,8 +4,7 @@ import br.com.ticket.sale.core.common.domain.value_objects.Name;
 import br.com.ticket.sale.core.events.domain.entities.partner.Partner;
 import br.com.ticket.sale.core.events.domain.entities.partner.PartnerConstructorProps;
 import br.com.ticket.sale.core.events.domain.entities.partner.PartnerId;
-import br.com.ticket.sale.core.events.infra.persistence.jpa.entities.PartnerJpaEntity;
-import br.com.ticket.sale.core.events.infra.persistence.jpa.repositories.PartnerJpaRepository;
+import br.com.ticket.sale.core.events.domain.entities.partner.PartnerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PartnerPersistenceTest {
 
     @Autowired
-    private PartnerJpaRepository repository;
+    private PartnerRepository repository;
 
     @Test
     void mustCreateAPartner() {
@@ -27,17 +26,13 @@ public class PartnerPersistenceTest {
                 )
         );
 
-        PartnerJpaEntity entity = new PartnerJpaEntity();
-        entity.setId(partner.getId().getValue());
-        entity.setName(partner.getName().getValue());
+        repository.add(partner);
 
-        repository.save(entity);
-
-        PartnerJpaEntity found =
-                repository.findById(partner.getId().getValue())
+        Partner found =
+                repository.findById(partner.getId())
                         .orElse(null);
 
         assertNotNull(found);
-        assertEquals("Ticket Company", found.getName());
+        assertEquals("Ticket Company", found.getName().getValue());
     }
 }
