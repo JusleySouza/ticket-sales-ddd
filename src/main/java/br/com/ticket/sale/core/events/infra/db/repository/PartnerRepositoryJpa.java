@@ -2,7 +2,7 @@ package br.com.ticket.sale.core.events.infra.db.repository;
 
 import br.com.ticket.sale.core.events.domain.entities.partner.Partner;
 import br.com.ticket.sale.core.events.domain.entities.partner.PartnerId;
-import br.com.ticket.sale.core.events.domain.entities.partner.PartnerRepository;
+import br.com.ticket.sale.core.events.domain.repositories.PartnerRepository;
 import br.com.ticket.sale.core.events.infra.persistence.jpa.mappers.PartnerMapper;
 import br.com.ticket.sale.core.events.infra.persistence.jpa.repositories.PartnerJpaRepository;
 import org.springframework.stereotype.Repository;
