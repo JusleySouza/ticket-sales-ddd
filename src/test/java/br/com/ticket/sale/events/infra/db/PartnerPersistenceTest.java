@@ -4,7 +4,7 @@ import br.com.ticket.sale.core.common.domain.value_objects.Name;
 import br.com.ticket.sale.core.events.domain.entities.partner.Partner;
 import br.com.ticket.sale.core.events.domain.entities.partner.PartnerConstructorProps;
 import br.com.ticket.sale.core.events.domain.entities.partner.PartnerId;
-import br.com.ticket.sale.core.events.domain.entities.partner.PartnerRepository;
+import br.com.ticket.sale.core.events.domain.repositories.PartnerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
