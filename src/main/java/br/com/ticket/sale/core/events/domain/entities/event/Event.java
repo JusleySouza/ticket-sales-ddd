@@ -111,6 +111,10 @@ public class Event extends AggregateRoot<EventId> {
         return description;
     }
 
+    public LocalDateTime getDate() { return date; }
+
+    public PartnerId getPartnerId() { return partnerId; }
+
     public boolean isPublished() {
         return isPublished;
     }
