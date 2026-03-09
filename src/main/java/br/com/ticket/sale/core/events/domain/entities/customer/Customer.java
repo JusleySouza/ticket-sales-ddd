@@ -9,7 +9,7 @@ import java.util.Map;
 public class Customer extends AggregateRoot<CustomerId> {
 
     private final Cpf cpf;
-    private final Name name;
+    private Name name;
 
     public Customer(CustomerConstructorProps props) {
         this.id = props.id() == null ? new CustomerId() : props.id();
@@ -26,6 +26,10 @@ public class Customer extends AggregateRoot<CustomerId> {
                         command.name()
                 )
         );
+    }
+
+    public void changeName(Name name) {
+        this.name = name;
     }
 
     @Override
