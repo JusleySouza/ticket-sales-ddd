@@ -5,6 +5,7 @@ import br.com.ticket.sale.core.common.domain.value_objects.Name;
 import br.com.ticket.sale.core.events.domain.entities.event.spot.EventSpot;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -59,8 +60,8 @@ public class EventSection extends Entity<EventSectionId> {
     }
 
     private void initSpots() {
-        for (int i = 0; i < this.totalSpots; i++) {
-            this.spots.add(EventSpot.create());
+        for (int i = 1; i <= this.totalSpots; i++) {
+            this.spots.add(EventSpot.create("SPOT-" + i));
         }
     }
 
@@ -114,7 +115,7 @@ public class EventSection extends Entity<EventSectionId> {
     }
 
     public Set<EventSpot> getSpots() {
-        return spots;
+        return Collections.unmodifiableSet(spots);
     }
 
     @Override
