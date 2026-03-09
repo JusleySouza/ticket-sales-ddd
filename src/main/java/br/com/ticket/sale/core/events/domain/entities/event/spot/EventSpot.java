@@ -23,11 +23,11 @@ public class EventSpot extends Entity<EventSpotId> {
         this.isPublished = props.isPublished();
     }
 
-    public static EventSpot create() {
+    public static EventSpot create(String location) {
         return new EventSpot(
                 new EventSpotConstructorProps(
                         new EventSpotId(),
-                        null,
+                        location,
                         false,
                         false
                 )
