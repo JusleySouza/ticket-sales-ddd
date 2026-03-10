@@ -2,7 +2,7 @@ package br.com.ticket.sale.domain.entity.customer;
 
 import br.com.ticket.sale.core.common.domain.value_objects.Cpf;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
-import br.com.ticket.sale.core.events.domain.entities.customer.CreateCustomerCommand;
+import br.com.ticket.sale.core.events.application.commands.customer.CreateCustomerCommand;
 import br.com.ticket.sale.core.events.domain.entities.customer.Customer;
 import static org.assertj.core.api.Assertions.assertThat;
 

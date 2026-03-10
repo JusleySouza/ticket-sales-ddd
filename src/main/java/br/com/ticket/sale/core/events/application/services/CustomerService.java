@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class CustomerApplicationService {
+public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    public CustomerApplicationService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 
