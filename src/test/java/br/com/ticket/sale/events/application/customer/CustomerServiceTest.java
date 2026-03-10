@@ -2,8 +2,8 @@ package br.com.ticket.sale.events.application.customer;
 
 import br.com.ticket.sale.core.common.domain.value_objects.Cpf;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
-import br.com.ticket.sale.core.events.application.CustomerApplicationService;
-import br.com.ticket.sale.core.events.domain.entities.customer.CreateCustomerCommand;
+import br.com.ticket.sale.core.events.application.services.CustomerService;
+import br.com.ticket.sale.core.events.application.commands.customer.CreateCustomerCommand;
 import br.com.ticket.sale.core.events.domain.entities.customer.Customer;
 import br.com.ticket.sale.core.events.domain.repositories.CustomerRepository;
 import jakarta.persistence.EntityManager;
@@ -19,13 +19,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-public class CustomerApplicationServiceTest {
+public class CustomerServiceTest {
 
     @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
-    private CustomerApplicationService customerService;
+    private CustomerService customerService;
 
     @Autowired
     private EntityManager entityManager;

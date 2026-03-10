@@ -1,9 +1,9 @@
 package br.com.ticket.sale.events.infra.db;
 
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
-import br.com.ticket.sale.core.events.domain.entities.event.AddSectionCommand;
+import br.com.ticket.sale.core.events.application.commands.event.AddSectionCommand;
 import br.com.ticket.sale.core.events.domain.entities.event.Event;
-import br.com.ticket.sale.core.events.domain.entities.partner.InitEventCommand;
+import br.com.ticket.sale.core.events.application.commands.partner.InitEventCommand;
 import br.com.ticket.sale.core.events.domain.entities.partner.Partner;
 import br.com.ticket.sale.core.events.domain.entities.partner.PartnerConstructorProps;
 import br.com.ticket.sale.core.events.domain.entities.partner.PartnerId;

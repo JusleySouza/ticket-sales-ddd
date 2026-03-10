@@ -3,7 +3,7 @@ package br.com.ticket.sale.events.infra.db;
 import br.com.ticket.sale.TicketSaleDddApplication;
 import br.com.ticket.sale.core.common.domain.value_objects.Cpf;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
-import br.com.ticket.sale.core.events.domain.entities.customer.CreateCustomerCommand;
+import br.com.ticket.sale.core.events.application.commands.customer.CreateCustomerCommand;
 import br.com.ticket.sale.core.events.domain.entities.customer.Customer;
 import br.com.ticket.sale.core.events.domain.repositories.CustomerRepository;
 import org.junit.jupiter.api.Test;

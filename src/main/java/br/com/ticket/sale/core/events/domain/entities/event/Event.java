@@ -2,8 +2,10 @@ package br.com.ticket.sale.core.events.domain.entities.event;
 
 import br.com.ticket.sale.core.common.domain.AggregateRoot;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
+import br.com.ticket.sale.core.events.application.commands.event.AddSectionCommand;
+import br.com.ticket.sale.core.events.application.commands.event.CreateEventCommand;
 import br.com.ticket.sale.core.events.domain.entities.event.section.EventSection;
-import br.com.ticket.sale.core.events.domain.entities.event.section.EventSectionCreateCommand;
+import br.com.ticket.sale.core.events.application.commands.event.EventSectionCreateCommand;
 import br.com.ticket.sale.core.events.domain.entities.partner.PartnerId;
 
 import java.time.LocalDateTime;

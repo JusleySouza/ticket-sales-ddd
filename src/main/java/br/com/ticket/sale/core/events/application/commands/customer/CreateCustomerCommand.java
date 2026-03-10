@@ -1,4 +1,4 @@
-package br.com.ticket.sale.core.events.domain.entities.customer;
+package br.com.ticket.sale.core.events.application.commands.customer;
 
 import br.com.ticket.sale.core.common.domain.value_objects.Cpf;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
