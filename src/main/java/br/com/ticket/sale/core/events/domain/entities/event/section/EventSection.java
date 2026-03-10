@@ -2,7 +2,9 @@ package br.com.ticket.sale.core.events.domain.entities.event.section;
 
 import br.com.ticket.sale.core.common.domain.Entity;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
+import br.com.ticket.sale.core.events.application.commands.event.EventSectionCreateCommand;
 import br.com.ticket.sale.core.events.domain.entities.event.spot.EventSpot;
+import br.com.ticket.sale.core.events.domain.entities.event.spot.EventSpotId;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -63,6 +65,16 @@ public class EventSection extends Entity<EventSectionId> {
         for (int i = 1; i <= this.totalSpots; i++) {
             this.spots.add(EventSpot.create("SPOT-" + i));
         }
+    }
+
+    public void changeLocation(EventSpotId spotId, String location) {
+
+        EventSpot spot = spots.stream()
+                .filter(s -> s.getId().equals(spotId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Spot not found"));
+
+        spot.changeLocation(location);
     }
 
     public void changeName(Name name) {
