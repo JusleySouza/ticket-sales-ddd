@@ -76,6 +76,7 @@ class CustomerServiceTest {
 
         verify(customerRepository).findById(customerId);
         verify(customer).changeName(new Name("Updated Name"));
+        verify(customerRepository).add(customer);
 
         assertEquals(customer, result);
     }

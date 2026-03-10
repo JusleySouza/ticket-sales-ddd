@@ -50,6 +50,8 @@ public class CustomerService {
             customer.changeName(command.name());
         }
 
+        customerRepository.add(customer);
+
         return customer;
     }
 }
