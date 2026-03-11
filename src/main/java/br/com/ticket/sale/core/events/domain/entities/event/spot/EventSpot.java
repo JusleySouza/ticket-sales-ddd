@@ -34,6 +34,10 @@ public class EventSpot extends Entity<EventSpotId> {
         );
     }
 
+    public void markAsReserved() {
+        this.isReserved = true;
+    }
+
     public void changeLocation(String location) {
         this.location = location;
     }
