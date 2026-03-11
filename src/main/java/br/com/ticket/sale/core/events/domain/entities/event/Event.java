@@ -4,9 +4,14 @@ import br.com.ticket.sale.core.common.domain.AggregateRoot;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
 import br.com.ticket.sale.core.events.application.commands.event.AddSectionCommand;
 import br.com.ticket.sale.core.events.application.commands.event.CreateEventCommand;
+import br.com.ticket.sale.core.events.domain.entities.customer.CustomerId;
 import br.com.ticket.sale.core.events.domain.entities.event.section.EventSection;
 import br.com.ticket.sale.core.events.application.commands.event.EventSectionCreateCommand;
+import br.com.ticket.sale.core.events.domain.entities.event.section.EventSectionId;
+import br.com.ticket.sale.core.events.domain.entities.event.spot.EventSpot;
+import br.com.ticket.sale.core.events.domain.entities.event.spot.EventSpotId;
 import br.com.ticket.sale.core.events.domain.entities.partner.PartnerId;
+import br.com.ticket.sale.core.events.domain.entities.reservation.SpotReservation;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -103,6 +108,29 @@ public class Event extends AggregateRoot<EventId> {
         EventSection section = EventSection.create(createCommand);
         this.sections.add(section);
         this.totalSpots += section.getTotalSpots();
+    }
+
+    public boolean allowReserveSpot(EventSectionId sectionId, EventSpotId spotId ) {
+        if (!isPublished()) {
+            return false;
+        }
+
+        EventSection section = sections.stream()
+                .filter(s -> s.getId().equals(sectionId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Section not found"));
+
+        return section.allowReserveSpot(spotId);
+    }
+
+    public void markSpotAsReserved( EventSectionId sectionId, EventSpotId spotId ) {
+        EventSection section = this.sections
+                .stream()
+                .filter(s -> s.getId().equals(sectionId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Section not found"));
+
+        section.markSpotAsReserved(spotId);
     }
 
     public Name getName() {
