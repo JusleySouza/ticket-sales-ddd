@@ -1,0 +1,67 @@
+package br.com.ticket.sale.core.events.domain.entities.order;
+
+import br.com.ticket.sale.core.common.domain.AggregateRoot;
+import br.com.ticket.sale.core.events.domain.entities.customer.CustomerId;
+import br.com.ticket.sale.core.events.domain.entities.event.spot.EventSpotId;
+
+import java.math.BigDecimal;
+import java.util.Map;
+
+public class Order extends AggregateRoot<OrderId> {
+
+    private OrderId id;
+    private CustomerId customerId;
+    private EventSpotId eventSpotId;
+    private BigDecimal amount;
+    private OrderStatus status;
+
+    public Order(OrderId id,
+                 CustomerId customerId,
+                 EventSpotId eventSpotId,
+                 BigDecimal amount,
+                 OrderStatus status) {
+
+        this.id = id == null ? new OrderId() : id;
+        this.customerId = customerId;
+        this.eventSpotId = eventSpotId;
+        this.amount = amount;
+        this.status = status == null ? OrderStatus.PENDING : status;
+    }
+
+    public static Order create(
+            CustomerId customerId,
+            EventSpotId spotId,
+            BigDecimal amount
+    ) {
+        return new Order(null, customerId, spotId, amount, OrderStatus.PENDING);
+    }
+
+    public void pay() {
+        this.status = OrderStatus.PAID;
+    }
+
+    public void cancel() {
+        this.status = OrderStatus.CANCELLED;
+    }
+
+    public OrderId getId() { return id; }
+
+    public CustomerId getCustomerId() { return customerId; }
+
+    public EventSpotId getEventSpotId() { return eventSpotId; }
+
+    public BigDecimal getAmount() { return amount; }
+
+    public OrderStatus getStatus() { return status; }
+
+    @Override
+    public Map<String, Object> toJSON() {
+        return Map.of(
+                "id", id.getValue(),
+                "customerId", customerId.getValue(),
+                "eventSpotId", eventSpotId,
+                "amount", amount,
+                "status", status
+        );
+    }
+}
