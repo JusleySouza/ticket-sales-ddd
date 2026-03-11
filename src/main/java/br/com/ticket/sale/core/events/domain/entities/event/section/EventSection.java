@@ -77,6 +77,41 @@ public class EventSection extends Entity<EventSectionId> {
         spot.changeLocation(location);
     }
 
+    public boolean allowReserveSpot(EventSpotId spotId) {
+        if (!isPublished()) {
+            return false;
+        }
+
+        EventSpot spot = spots.stream()
+                .filter(s -> s.getId().equals(spotId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Spot not found"));
+
+        if (spot.isReserved()) {
+            return false;
+        }
+
+        if (!spot.isPublished()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void markSpotAsReserved(EventSpotId spotId) {
+
+        EventSpot spot = spots.stream()
+                .filter(s -> s.getId().equals(spotId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Spot not found"));
+
+        if (spot.isReserved()) {
+            throw new RuntimeException("Spot already reserved");
+        }
+
+        spot.markAsReserved();
+    }
+
     public void changeName(Name name) {
         this.name = name;
     }
