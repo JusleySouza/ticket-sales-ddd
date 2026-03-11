@@ -7,6 +7,7 @@ import br.com.ticket.sale.core.events.domain.entities.event.spot.EventSpotId;
 import java.math.BigDecimal;
 import java.util.Map;
 
+// Representa uma ordem de compra para um evento, associada a um cliente e a um spot específico.
 public class Order extends AggregateRoot<OrderId> {
 
     private OrderId id;
