@@ -1,3 +1,24 @@
 package br.com.ticket.sale.core.common.domain;
 
-public abstract class AggregateRoot<ID> extends Entity<ID>{}
+import br.com.ticket.sale.core.events.domain.entities.event.DomainEvent;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public abstract class AggregateRoot<ID> extends Entity<ID>{
+
+    private final Set<DomainEvent> events = new HashSet<>();
+
+    public void addEvent(DomainEvent event) {
+        this.events.add(event);
+    }
+
+    public void clearEvents() {
+        this.events.clear();
+    }
+
+    public Set<DomainEvent> getEvents() {
+        return events;
+    }
+
+}
