@@ -9,5 +9,6 @@ public record CreateOrderCommand(
         EventId eventId,
         EventSectionId eventSectionId,
         EventSpotId eventSpotId,
-        CustomerId customerId
+        CustomerId customerId,
+        String cardToken
 ) {}
