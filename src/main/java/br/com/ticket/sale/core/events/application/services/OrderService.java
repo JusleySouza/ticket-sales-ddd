@@ -2,6 +2,7 @@ package br.com.ticket.sale.core.events.application.services;
 
 import br.com.ticket.sale.core.events.application.commands.order.CreateOrderCommand;
 import br.com.ticket.sale.core.events.application.commands.spot_reservation.CreateSpotReservationCommand;
+import br.com.ticket.sale.core.events.application.gateways.PaymentGateway;
 import br.com.ticket.sale.core.events.application.queries.order.ListOrdersQuery;
 import br.com.ticket.sale.core.events.domain.entities.customer.Customer;
 import br.com.ticket.sale.core.events.domain.entities.event.Event;
@@ -25,17 +26,20 @@ public class OrderService {
     private final CustomerRepository customerRepo;
     private final EventRepository eventRepo;
     private final SpotReservationRepository spotReservationRepo;
+    private final PaymentGateway paymentGateway;
 
     public OrderService(
             OrderRepository orderRepo,
             CustomerRepository customerRepo,
             EventRepository eventRepo,
-            SpotReservationRepository spotReservationRepo
+            SpotReservationRepository spotReservationRepo,
+            PaymentGateway paymentGateway
     ) {
         this.orderRepo = orderRepo;
         this.customerRepo = customerRepo;
         this.eventRepo = eventRepo;
         this.spotReservationRepo = spotReservationRepo;
+        this.paymentGateway = paymentGateway;
     }
 
     public List<Order> list(ListOrdersQuery query) {
@@ -77,18 +81,37 @@ public class OrderService {
                 .findFirst()
                 .orElseThrow();
 
-        Order order = Order.create(
-                command.customerId(),
-                command.eventSpotId(),
-                section.getPrice()
-        );
+        try {
+            paymentGateway.pay(command.cardToken(), section.getPrice());
 
-        orderRepo.add(order);
+            Order order = Order.create(
+                    command.customerId(),
+                    command.eventSpotId(),
+                    section.getPrice()
+            );
 
-        event.markSpotAsReserved(command.eventSectionId(), command.eventSpotId());
+            order.pay();
 
-        eventRepo.add(event);
+            orderRepo.add(order);
 
-        return order;
+            event.markSpotAsReserved(command.eventSectionId(), command.eventSpotId());
+
+            eventRepo.add(event);
+
+            return order;
+
+        }catch(Exception e) {
+            Order order = Order.create(
+                    command.customerId(),
+                    command.eventSpotId(),
+                    section.getPrice()
+            );
+
+            order.cancel();
+
+            orderRepo.add(order);
+
+            throw new RuntimeException("Payment failed", e);
+        }
     }
 }
