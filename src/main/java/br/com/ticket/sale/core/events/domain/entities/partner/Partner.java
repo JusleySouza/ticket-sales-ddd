@@ -5,6 +5,7 @@ import br.com.ticket.sale.core.common.domain.value_objects.Name;
 import br.com.ticket.sale.core.events.application.commands.event.CreateEventCommand;
 import br.com.ticket.sale.core.events.application.commands.partner.InitEventCommand;
 import br.com.ticket.sale.core.events.domain.entities.event.Event;
+import br.com.ticket.sale.core.events.domain.entities.event.EventCreated;
 
 import java.util.Map;
 
@@ -25,12 +26,14 @@ public class Partner extends AggregateRoot<PartnerId> {
     }
 
     public static Partner create(Name name) {
-        return new Partner(
+        Partner partner = new Partner(
                 new PartnerConstructorProps(
                         new PartnerId(),
                         name
                 )
         );
+        partner.addEvent(new PartnerCreated(partner.id, partner.name));
+        return partner;
     }
 
     public Event initEvent(InitEventCommand command) {
@@ -40,12 +43,14 @@ public class Partner extends AggregateRoot<PartnerId> {
                 command.date(),
                 this.id
         );
-
-        return Event.create(createCommand);
+        Event event = Event.create(createCommand);
+        this.addEvent(new EventCreated(this.id, event.getId()));
+        return event;
     }
 
     public void changeName(Name name) {
         this.name = name;
+        this.addEvent(new PartnerChangedName(this.id, this.name));
     }
 
     public Name getName() {
@@ -56,7 +61,7 @@ public class Partner extends AggregateRoot<PartnerId> {
     public Map<String, Object> toJSON() {
         return Map.of(
                 "id", id.getValue(),
-                "name", name
+                "name", name.getValue()
         );
     }
 }
