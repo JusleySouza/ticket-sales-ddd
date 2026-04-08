@@ -6,5 +6,4 @@ public record UpdateEventCommand(
         String name,
         String description,
         LocalDateTime date
-) {
-}
+) {}
