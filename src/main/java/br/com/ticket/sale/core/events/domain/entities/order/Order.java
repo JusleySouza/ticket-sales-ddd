@@ -1,8 +1,10 @@
 package br.com.ticket.sale.core.events.domain.entities.order;
 
-import br.com.ticket.sale.core.common.domain.AggregateRoot;
+import br.com.ticket.sale.core.common.domain.entity.AggregateRoot;
 import br.com.ticket.sale.core.events.domain.entities.customer.CustomerId;
 import br.com.ticket.sale.core.events.domain.entities.event.spot.EventSpotId;
+import br.com.ticket.sale.core.events.domain.events.OrderCreatedEvent;
+import br.com.ticket.sale.core.events.domain.events.PaymentApprovedEvent;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -29,16 +31,15 @@ public class Order extends AggregateRoot<OrderId> {
         this.status = status == null ? OrderStatus.PENDING : status;
     }
 
-    public static Order create(
-            CustomerId customerId,
-            EventSpotId spotId,
-            BigDecimal amount
-    ) {
-        return new Order(null, customerId, spotId, amount, OrderStatus.PENDING);
+    public static Order create(CustomerId customerId, EventSpotId spotId, BigDecimal amount) {
+        Order order = new Order(new OrderId(), customerId, spotId, amount, OrderStatus.PENDING);
+        order.addEvent(new OrderCreatedEvent(order.getId()));
+        return order;
     }
 
     public void pay() {
         this.status = OrderStatus.PAID;
+        this.addEvent(new PaymentApprovedEvent(this.getId()));
     }
 
     public void cancel() {
