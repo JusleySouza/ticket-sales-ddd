@@ -1,10 +1,10 @@
 package br.com.ticket.sale.core.events.application.services;
 
+import br.com.ticket.sale.core.common.application.ApplicationService;
 import br.com.ticket.sale.core.events.application.commands.order.CreateOrderCommand;
 import br.com.ticket.sale.core.events.application.commands.spot_reservation.CreateSpotReservationCommand;
 import br.com.ticket.sale.core.events.application.gateways.PaymentGateway;
 import br.com.ticket.sale.core.events.application.queries.order.ListOrdersQuery;
-import br.com.ticket.sale.core.events.domain.entities.customer.Customer;
 import br.com.ticket.sale.core.events.domain.entities.event.Event;
 import br.com.ticket.sale.core.events.domain.entities.event.section.EventSection;
 import br.com.ticket.sale.core.events.domain.entities.order.Order;
@@ -13,6 +13,7 @@ import br.com.ticket.sale.core.events.domain.repositories.CustomerRepository;
 import br.com.ticket.sale.core.events.domain.repositories.EventRepository;
 import br.com.ticket.sale.core.events.domain.repositories.OrderRepository;
 import br.com.ticket.sale.core.events.domain.repositories.SpotReservationRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
 
     private final OrderRepository orderRepo;
@@ -27,20 +29,7 @@ public class OrderService {
     private final EventRepository eventRepo;
     private final SpotReservationRepository spotReservationRepo;
     private final PaymentGateway paymentGateway;
-
-    public OrderService(
-            OrderRepository orderRepo,
-            CustomerRepository customerRepo,
-            EventRepository eventRepo,
-            SpotReservationRepository spotReservationRepo,
-            PaymentGateway paymentGateway
-    ) {
-        this.orderRepo = orderRepo;
-        this.customerRepo = customerRepo;
-        this.eventRepo = eventRepo;
-        this.spotReservationRepo = spotReservationRepo;
-        this.paymentGateway = paymentGateway;
-    }
+    private final ApplicationService applicationService;
 
     public List<Order> list(ListOrdersQuery query) {
         return orderRepo.findAll();
@@ -48,10 +37,7 @@ public class OrderService {
 
     @Transactional
     public Order create(CreateOrderCommand command) {
-
-        Customer customer = customerRepo
-                .findById(command.customerId())
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        customerRepo.findById(command.customerId()).orElseThrow(() -> new RuntimeException("Customer not found"));
 
         Event event = eventRepo
                 .findById(command.eventId())
@@ -91,13 +77,12 @@ public class OrderService {
             );
 
             order.pay();
-
             orderRepo.add(order);
 
             event.markSpotAsReserved(command.eventSectionId(), command.eventSpotId());
-
             eventRepo.add(event);
 
+            applicationService.commit(order);
             return order;
 
         }catch(Exception e) {

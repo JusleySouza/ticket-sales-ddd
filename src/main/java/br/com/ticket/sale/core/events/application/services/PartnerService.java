@@ -1,24 +1,24 @@
 package br.com.ticket.sale.core.events.application.services;
 
+import br.com.ticket.sale.core.common.application.ApplicationService;
 import br.com.ticket.sale.core.events.application.commands.partner.CreatePartnerCommand;
 import br.com.ticket.sale.core.events.application.commands.partner.UpdatePartnerCommand;
 import br.com.ticket.sale.core.events.application.queries.partner.ListPartnersQuery;
 import br.com.ticket.sale.core.events.domain.entities.partner.Partner;
 import br.com.ticket.sale.core.events.domain.entities.partner.PartnerId;
 import br.com.ticket.sale.core.events.domain.repositories.PartnerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PartnerService {
 
     private final PartnerRepository partnerRepo;
-
-    public PartnerService(PartnerRepository partnerRepo) {
-        this.partnerRepo = partnerRepo;
-    }
+    private final ApplicationService applicationService;
 
     public List<Partner> list(ListPartnersQuery query) {
         return partnerRepo.findAll();
@@ -26,10 +26,9 @@ public class PartnerService {
 
     @Transactional
     public Partner create(CreatePartnerCommand command) {
-        Partner partner = Partner.create(
-                command.name()
-        );
+        Partner partner = Partner.create(command.name());
         partnerRepo.add(partner);
+        applicationService.commit(partner);
         return partner;
     }
 
@@ -42,6 +41,7 @@ public class PartnerService {
             partner.changeName(command.name());
         }
         partnerRepo.add(partner);
+        applicationService.commit(partner);
         return partner;
     }
 }

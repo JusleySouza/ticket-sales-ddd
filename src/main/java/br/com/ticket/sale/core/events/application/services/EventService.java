@@ -1,5 +1,6 @@
 package br.com.ticket.sale.core.events.application.services;
 
+import br.com.ticket.sale.core.common.application.ApplicationService;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
 import br.com.ticket.sale.core.events.application.commands.event.AddSectionCommand;
 import br.com.ticket.sale.core.events.application.commands.event.CreateEventCommand;
@@ -19,28 +20,25 @@ import br.com.ticket.sale.core.events.domain.entities.event.spot.EventSpotId;
 import br.com.ticket.sale.core.events.domain.entities.partner.Partner;
 import br.com.ticket.sale.core.events.domain.repositories.EventRepository;
 import br.com.ticket.sale.core.events.domain.repositories.PartnerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class EventService {
 
     private final EventRepository eventRepo;
     private final PartnerRepository partnerRepo;
-
-    public EventService(EventRepository eventRepo, PartnerRepository partnerRepo) {
-        this.eventRepo = eventRepo;
-        this.partnerRepo = partnerRepo;
-    }
+    private final ApplicationService applicationService;
 
     public List<Event> list(ListEventsQuery query) {
         return eventRepo.findAll();
     }
 
     public List<EventSection> findSections(EventId eventId, FindSectionsQuery query) {
-
         Event event = eventRepo.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
 
@@ -67,7 +65,6 @@ public class EventService {
 
     @Transactional
     public Event create(CreateEventCommand command) {
-
         Partner partner = partnerRepo.findById(command.partnerId())
                 .orElseThrow(() -> new RuntimeException("Partner not found"));
 
@@ -76,17 +73,15 @@ public class EventService {
                 command.description(),
                 command.date()
         );
-
         Event event = partner.initEvent(initCommand);
 
         eventRepo.add(event);
-
+        applicationService.commit(event);
         return event;
     }
 
     @Transactional
     public Event update(EventId eventId, UpdateEventCommand command) {
-
         Event event = eventRepo.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
 
@@ -103,7 +98,7 @@ public class EventService {
         }
 
         eventRepo.add(event);
-
+        applicationService.commit(event);
         return event;
     }
 
@@ -116,7 +111,7 @@ public class EventService {
         event.addSection(command);
 
         eventRepo.add(event);
-
+        applicationService.commit(event);
         return event;
     }
 
@@ -186,7 +181,7 @@ public class EventService {
         event.publishAll();
 
         eventRepo.add(event);
-
+        applicationService.commit(event);
         return event;
     }
 }
