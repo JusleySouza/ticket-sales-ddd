@@ -1,6 +1,7 @@
-package br.com.ticket.sale.core.events.domain.entities.event;
+package br.com.ticket.sale.core.events.domain.events;
 
 import br.com.ticket.sale.core.common.domain.event.AbstractDomainEvent;
+import br.com.ticket.sale.core.events.domain.entities.event.EventId;
 import br.com.ticket.sale.core.events.domain.entities.partner.PartnerId;
 
 public class EventCreated extends AbstractDomainEvent {

@@ -1,39 +1,23 @@
-package br.com.ticket.sale.core.events.domain.entities.partner;
+package br.com.ticket.sale.core.events.domain.events;
 
+import br.com.ticket.sale.core.common.domain.event.AbstractDomainEvent;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
-import br.com.ticket.sale.core.common.domain.event.DomainEvent;
+import br.com.ticket.sale.core.events.domain.entities.partner.PartnerId;
 
-import java.time.Instant;
+public class PartnerChangedNameEvent extends AbstractDomainEvent {
 
-public class PartnerChangedName implements DomainEvent {
+    private final Name newName;
 
-    private final PartnerId aggregateId;
-    private final Name name;
-    private final Instant occurredOn;
-    private final int eventVersion = 1;
-
-    public PartnerChangedName(PartnerId aggregateId, Name name) {
-        this.aggregateId = aggregateId;
-        this.name = name;
-        this.occurredOn = Instant.now();
+    public PartnerChangedNameEvent(PartnerId id, Name newName) {
+        super(id, 1);
+        this.newName = newName;
     }
 
-    @Override
-    public PartnerId getAggregateId() {
-        return aggregateId;
+    public PartnerId getPartnerId() {
+        return (PartnerId) getAggregateId();
     }
 
-    @Override
-    public Instant getOccurredOn() {
-        return occurredOn;
-    }
-
-    @Override
-    public int getEventVersion() {
-        return eventVersion;
-    }
-
-    public Name getName() {
-        return name;
+    public Name getNewName() {
+        return newName;
     }
 }
