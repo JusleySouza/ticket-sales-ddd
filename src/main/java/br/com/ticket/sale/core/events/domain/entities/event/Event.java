@@ -1,6 +1,6 @@
 package br.com.ticket.sale.core.events.domain.entities.event;
 
-import br.com.ticket.sale.core.common.domain.AggregateRoot;
+import br.com.ticket.sale.core.common.domain.entity.AggregateRoot;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
 import br.com.ticket.sale.core.events.application.commands.event.AddSectionCommand;
 import br.com.ticket.sale.core.events.application.commands.event.CreateEventCommand;
@@ -9,6 +9,7 @@ import br.com.ticket.sale.core.events.application.commands.event.EventSectionCre
 import br.com.ticket.sale.core.events.domain.entities.event.section.EventSectionId;
 import br.com.ticket.sale.core.events.domain.entities.event.spot.EventSpotId;
 import br.com.ticket.sale.core.events.domain.entities.partner.PartnerId;
+import br.com.ticket.sale.core.events.domain.events.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -63,14 +64,17 @@ public class Event extends AggregateRoot<EventId> {
 
     public void changeName(Name name) {
         this.name = name;
+        this.addEvent(new EventNameChanged(this.getId(), name));
     }
 
     public void changeDescription(String description) {
         this.description = description;
+        this.addEvent(new EventDescriptionChanged(this.getId(), description));
     }
 
     public void changeDate(LocalDateTime date) {
         this.date = date;
+        this.addEvent(new EventDateChanged(this.getId(), date));
     }
 
     public void publishAll() {
@@ -80,6 +84,7 @@ public class Event extends AggregateRoot<EventId> {
 
     public void publish() {
         this.isPublished = true;
+        this.addEvent(new EventPublished(this.getId()));
     }
 
     public void unPublish() {
@@ -105,6 +110,7 @@ public class Event extends AggregateRoot<EventId> {
         EventSection section = EventSection.create(createCommand);
         this.sections.add(section);
         this.totalSpots += section.getTotalSpots();
+        this.addEvent(new EventSectionAdded(this.getId(), section.getId()));
     }
 
     public boolean allowReserveSpot(EventSectionId sectionId, EventSpotId spotId ) {
