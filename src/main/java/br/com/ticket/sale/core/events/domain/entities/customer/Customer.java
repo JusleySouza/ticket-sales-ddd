@@ -1,9 +1,11 @@
 package br.com.ticket.sale.core.events.domain.entities.customer;
 
-import br.com.ticket.sale.core.common.domain.AggregateRoot;
+import br.com.ticket.sale.core.common.domain.entity.AggregateRoot;
 import br.com.ticket.sale.core.common.domain.value_objects.Cpf;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
 import br.com.ticket.sale.core.events.application.commands.customer.CreateCustomerCommand;
+import br.com.ticket.sale.core.events.domain.events.CustomerCreatedEvent;
+import br.com.ticket.sale.core.events.domain.events.CustomerNameChangedEvent;
 
 import java.util.Map;
 
@@ -20,17 +22,20 @@ public class Customer extends AggregateRoot<CustomerId> {
 
 
     public static Customer create(CreateCustomerCommand command) {
-        return new Customer(
+        Customer customer = new Customer(
                 new CustomerConstructorProps(
                         new CustomerId(),
                         command.cpf(),
                         command.name()
                 )
         );
+        customer.addEvent(new CustomerCreatedEvent(customer.getId()));
+        return customer;
     }
 
     public void changeName(Name name) {
         this.name = name;
+        this.addEvent(new CustomerNameChangedEvent(this.getId(), name));
     }
 
     @Override
@@ -49,6 +54,8 @@ public class Customer extends AggregateRoot<CustomerId> {
     public Name getName() {
         return name;
     }
+
+    public CustomerId getId() { return id; }
 
 }
 
