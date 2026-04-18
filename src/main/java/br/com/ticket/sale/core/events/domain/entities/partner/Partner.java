@@ -1,11 +1,13 @@
 package br.com.ticket.sale.core.events.domain.entities.partner;
 
-import br.com.ticket.sale.core.common.domain.AggregateRoot;
+import br.com.ticket.sale.core.common.domain.entity.AggregateRoot;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
 import br.com.ticket.sale.core.events.application.commands.event.CreateEventCommand;
 import br.com.ticket.sale.core.events.application.commands.partner.InitEventCommand;
 import br.com.ticket.sale.core.events.domain.entities.event.Event;
-import br.com.ticket.sale.core.events.domain.entities.event.EventCreated;
+import br.com.ticket.sale.core.events.domain.events.EventCreated;
+import br.com.ticket.sale.core.events.domain.events.PartnerChangedNameEvent;
+import br.com.ticket.sale.core.events.domain.events.PartnerCreatedEvent;
 
 import java.util.Map;
 
@@ -32,7 +34,7 @@ public class Partner extends AggregateRoot<PartnerId> {
                         name
                 )
         );
-        partner.addEvent(new PartnerCreated(partner.id, partner.name));
+        partner.addEvent(new PartnerCreatedEvent(partner.getId()));
         return partner;
     }
 
@@ -50,7 +52,7 @@ public class Partner extends AggregateRoot<PartnerId> {
 
     public void changeName(Name name) {
         this.name = name;
-        this.addEvent(new PartnerChangedName(this.id, this.name));
+        this.addEvent(new PartnerChangedNameEvent(this.getId(), name));
     }
 
     public Name getName() {
