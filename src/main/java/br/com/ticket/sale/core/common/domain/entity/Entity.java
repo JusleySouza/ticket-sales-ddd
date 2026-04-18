@@ -1,4 +1,4 @@
-package br.com.ticket.sale.core.common.domain;
+package br.com.ticket.sale.core.common.domain.entity;
 
 import java.util.Objects;
 

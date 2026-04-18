@@ -1,6 +1,6 @@
 package br.com.ticket.sale.core.events.domain.entities.event.section;
 
-import br.com.ticket.sale.core.common.domain.Entity;
+import br.com.ticket.sale.core.common.domain.entity.Entity;
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
 import br.com.ticket.sale.core.events.application.commands.event.EventSectionCreateCommand;
 import br.com.ticket.sale.core.events.domain.entities.event.spot.EventSpot;
@@ -43,7 +43,6 @@ public class EventSection extends Entity<EventSectionId> {
     }
 
     public static EventSection create(EventSectionCreateCommand command) {
-
         EventSection section = new EventSection(
                 new EventSectionConstructorProps(
                         new EventSectionId(),
@@ -68,7 +67,6 @@ public class EventSection extends Entity<EventSectionId> {
     }
 
     public void changeLocation(EventSpotId spotId, String location) {
-
         EventSpot spot = spots.stream()
                 .filter(s -> s.getId().equals(spotId))
                 .findFirst()

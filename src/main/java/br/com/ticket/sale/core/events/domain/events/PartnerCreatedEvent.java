@@ -1,18 +1,18 @@
 package br.com.ticket.sale.core.events.domain.entities.partner;
 
 import br.com.ticket.sale.core.common.domain.value_objects.Name;
-import br.com.ticket.sale.core.events.domain.entities.event.DomainEvent;
+import br.com.ticket.sale.core.common.domain.event.DomainEvent;
 
 import java.time.Instant;
 
-public class PartnerChangedName implements DomainEvent {
+public class PartnerCreated implements DomainEvent {
 
     private final PartnerId aggregateId;
     private final Name name;
     private final Instant occurredOn;
     private final int eventVersion = 1;
 
-    public PartnerChangedName(PartnerId aggregateId, Name name) {
+    public PartnerCreated(PartnerId aggregateId, Name name) {
         this.aggregateId = aggregateId;
         this.name = name;
         this.occurredOn = Instant.now();

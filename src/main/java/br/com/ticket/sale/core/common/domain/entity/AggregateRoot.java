@@ -1,11 +1,12 @@
-package br.com.ticket.sale.core.common.domain;
+package br.com.ticket.sale.core.common.domain.entity;
 
-import br.com.ticket.sale.core.events.domain.entities.event.DomainEvent;
+import br.com.ticket.sale.core.common.domain.event.DomainEvent;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class AggregateRoot<ID> extends Entity<ID>{
+public abstract class AggregateRoot<ID> extends Entity<ID> {
 
     private final Set<DomainEvent> events = new HashSet<>();
 
@@ -18,7 +19,7 @@ public abstract class AggregateRoot<ID> extends Entity<ID>{
     }
 
     public Set<DomainEvent> getEvents() {
-        return events;
+        return Collections.unmodifiableSet(events);
     }
 
 }

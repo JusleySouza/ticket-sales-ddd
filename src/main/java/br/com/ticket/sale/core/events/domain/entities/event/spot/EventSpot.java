@@ -1,6 +1,6 @@
 package br.com.ticket.sale.core.events.domain.entities.event.spot;
 
-import br.com.ticket.sale.core.common.domain.Entity;
+import br.com.ticket.sale.core.common.domain.entity.Entity;
 
 import java.util.Map;
 

@@ -1,4 +1,6 @@
-package br.com.ticket.sale.core.common.domain;
+package br.com.ticket.sale.core.common.domain.repositories;
+
+import br.com.ticket.sale.core.common.domain.entity.AggregateRoot;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package br.com.ticket.sale.core.events.domain.repositories;
 
-import br.com.ticket.sale.core.common.domain.IRepository;
+import br.com.ticket.sale.core.common.domain.repositories.IRepository;
 import br.com.ticket.sale.core.events.domain.entities.event.Event;
 import br.com.ticket.sale.core.events.domain.entities.event.EventId;
 
